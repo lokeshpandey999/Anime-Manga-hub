@@ -9,9 +9,10 @@ export const COLORS = {
   border: "#C9C4B4",
 };
 
-export function Panel({ children, style }) {
+export function Panel({ children, style, className = "" }) {
   return (
     <div
+      className={className}
       style={{
         background: COLORS.paper,
         border: `3px solid ${COLORS.ink}`,
@@ -22,6 +23,19 @@ export function Panel({ children, style }) {
     >
       {children}
     </div>
+  );
+}
+
+export function SkeletonCard({ height = 240 }) {
+  return (
+    <div
+      className="skeleton"
+      style={{
+        height,
+        border: `3px solid ${COLORS.ink}`,
+        borderRadius: "2px",
+      }}
+    />
   );
 }
 
@@ -44,10 +58,10 @@ export function Badge({ children, color = COLORS.cobalt }) {
   );
 }
 
-export function MediaCard({ item, onAdd, added }) {
+export function MediaCard({ item, onAdd, added, style }) {
   const title = item.title.english || item.title.romaji;
   return (
-    <Panel style={{ overflow: "hidden", display: "flex", flexDirection: "column" }}>
+    <Panel className="hover-lift" style={{ overflow: "hidden", display: "flex", flexDirection: "column", ...style }}>
       <div style={{ position: "relative", aspectRatio: "2/3", overflow: "hidden", borderBottom: `3px solid ${COLORS.ink}` }}>
         <img src={item.coverImage.large} alt={title} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
         {item.averageScore ? (
@@ -66,6 +80,7 @@ export function MediaCard({ item, onAdd, added }) {
         {onAdd && (
           <button
             onClick={() => onAdd(item)}
+            className={added ? "pop-in" : ""}
             style={{
               marginTop: "auto",
               fontFamily: "'Bebas Neue', sans-serif",
@@ -81,6 +96,7 @@ export function MediaCard({ item, onAdd, added }) {
               color: COLORS.paper,
               cursor: "pointer",
               borderRadius: "2px",
+              transition: "background 0.2s ease",
             }}
           >
             {added ? <><Check size={14} /> On your list</> : <><Plus size={14} /> Add to list</>}
